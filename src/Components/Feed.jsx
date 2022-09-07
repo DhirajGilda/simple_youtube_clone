@@ -3,33 +3,35 @@ import { Box,Stack,Typography } from '@mui/material'
 import Sidebar from './Sidebar'
 import Videos from './Videos'
 import { fetchFromAPI } from '../utils/fetchFromAPI'
+
+
 const Feed = () => {
 
-    const [selectedCategory ,setselectedCategory]=useState('New')
-    const [videos , setVideos] =useState([]);
+  const [selectedCategory ,setselectedCategory]=useState('New')
+  const [videos , setVideos] =useState([]);
 
-    useEffect(() => {
-      setVideos(null);
-  
-      fetchFromAPI(`search?part=snippet&q=${selectedCategory}`)
-        .then((data) => setVideos(data.items))
-      }, [selectedCategory]);
+  useEffect(() => {
+    // setVideos(null);
+    fetchFromAPI(`search?part=snippet&q=${selectedCategory}`).then((data) => setVideos(data.items))
+  }, [selectedCategory]);
+
 
   return (
-    <Stack sx={{ flexDirection: { sx: "column", md: "row" } }}>
-        <Box sx={{ height: { sx: "auto", md: "92vh" }, borderRight: "1px solid #3d3d3d", px: { sx: 0, md: 2 } }}>
-            <Sidebar selectedCategory={selectedCategory} setSelectedCategory={setselectedCategory} />
-            
-            <Typography className="copyright" variant="body2" sx={{ mt: 1.5, color: "#fff", }}>
-            Copyright © 2022 React App
-            </Typography>
+    <Stack sx={{ flexDirection: { xs: "column", md: "row" } }}>
+        <Box sx={{
+          position: "relative",
+          justifyContent: "space-between",
+          alignItems: "center",
+          height: { sx: "auto", md: "92vh" },
+          borderRight: "1px solid #3d3d3d",
+          px: { sx: 0, md: 2 },
+        }}>
+            <Sidebar selectedCategory={selectedCategory} setSelectedCategory={setselectedCategory} />  
         </Box>
 
-        <Box p={2} sx={{overflow:'auto',height:'90vh',flex:'2'}}>
+        <Box px={3} sx={{overflowY:'auto',height:'92vh',flex:'2'}}>
             <Typography variant='h4' fontWeight={"bold"} mb={2} sx={{color:'white'}}>
-               {selectedCategory} <span style={{color:'#F31503'}}>
-                    Videos
-                </span>
+               {selectedCategory || 'Recommended'} <span style={{color:'#F31503'}}>Videos</span>
             </Typography>
 
             <Videos videos={videos}/>
@@ -41,15 +43,3 @@ const Feed = () => {
 
 export default Feed
 
-
-
-
-    // useEffect(() => {
-    //     setVideos(null);
-    
-    //     fetchFromAPI(`search?part=snippet&q=${selectedCategory}`).then( (data)=> {
-    //       console.log(data.data);
-    //     }).catch(function (error) {
-    //       console.error(error);
-    //     });
-    // }, [selectedCategory]);
